@@ -14,6 +14,11 @@ public class HomeController {
     @Autowired
     private DataSource source;
 
+    @GetMapping
+    public String getHome(){
+        return "API de Processos";
+    }
+
     @GetMapping("/conexao")
     public String getConnection(){
         String status = "";

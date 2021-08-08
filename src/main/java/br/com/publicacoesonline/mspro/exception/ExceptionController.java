@@ -1,5 +1,6 @@
 package br.com.publicacoesonline.mspro.exception;
 
+import br.com.publicacoesonline.mspro.utils.ExceptionJsonError;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,9 @@ public class ExceptionController {
             DataIntegrityViolationException.class
     })
     public ResponseEntity dataIntegrityViolationException(Exception ex){
-        return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        return new ResponseEntity<>(new ExceptionJsonError("Processo já cadastrado!"),HttpStatus.CONFLICT);
     }
+
 }
+
+
