@@ -26,7 +26,7 @@ public class ReuController {
         return new ResponseEntity<>(reu, HttpStatus.CREATED);
     }
 
-    @GetMapping({"", "/"})
+    @GetMapping( "/")
     public ResponseEntity<Page<Reu>> getReus(@PageableDefault(page = 0, size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
         return new ResponseEntity<>(reuService.buscarTodos(pageable), HttpStatus.OK);
     }

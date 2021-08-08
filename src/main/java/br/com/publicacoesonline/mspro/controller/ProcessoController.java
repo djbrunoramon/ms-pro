@@ -34,7 +34,7 @@ public class ProcessoController {
         return new ResponseEntity<>(processo, HttpStatus.CREATED);
     }
 
-    @GetMapping({"", "/"})
+    @GetMapping("/")
     public ResponseEntity<Page<Processo>> getProcessos(@PageableDefault(page = 0, size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
         return new ResponseEntity<>(processoService.buscarTodos(pageable), HttpStatus.OK);
     }
