@@ -34,7 +34,7 @@ public class ProcessoController {
         return new ResponseEntity<>(processo, HttpStatus.CREATED);
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<Page<Processo>> getProcessos(@PageableDefault(page = 0, size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
         return new ResponseEntity<>(processoService.buscarTodos(pageable), HttpStatus.OK);
     }
@@ -44,9 +44,9 @@ public class ProcessoController {
         Optional<Processo> processo = processoService.buscarPorNumero(numero);
 
         if(processo.isPresent()){
-            return new ResponseEntity<>(processo, HttpStatus.OK);
+            return new ResponseEntity<Processo>(processo.get(), HttpStatus.OK);
         }else{
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
@@ -57,7 +57,7 @@ public class ProcessoController {
             processoService.deletar(processo.get());
             return ResponseEntity.ok().build();
         }else{
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 

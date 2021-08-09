@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  db-postgres-compose:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: "Postgres2021!"
+    ports:
+      - "5432:5432"
+    networks:
+      - postgres-compose-network
+
+networks: 
+  postgres-compose-network:
+    driver: bridge

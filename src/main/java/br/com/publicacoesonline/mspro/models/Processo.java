@@ -27,7 +27,7 @@ public class Processo implements Serializable {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime criadoEm;
 
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany(cascade = {CascadeType.DETACH})
     @JoinTable(
             name = "TBL_PROCESSO_REUS",
             joinColumns = {@JoinColumn(name = "processo_id")},
