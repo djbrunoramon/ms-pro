@@ -1,9 +1,6 @@
 # Microserviço de Processos (ms-pro)
 
-<hr>
-
 ## 💻 Tecnologias utilizadas:
-
 - Java 8
 - Spring Web
 - Spring Data Jpa
@@ -15,4 +12,4 @@
 - Docker
 
 ###
-####Desenvolvido por Bruno Ramon, em 08/2021
+### Desenvolvido por Bruno Ramon, em 08/2021
