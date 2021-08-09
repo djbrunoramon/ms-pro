@@ -30,4 +30,5 @@ public class ReuController {
     public ResponseEntity<Page<Reu>> getReus(@PageableDefault(page = 0, size = 5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
         return new ResponseEntity<>(reuService.buscarTodos(pageable), HttpStatus.OK);
     }
+
 }

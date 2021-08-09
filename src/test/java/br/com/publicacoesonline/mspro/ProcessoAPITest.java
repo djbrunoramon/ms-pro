@@ -2,20 +2,16 @@ package br.com.publicacoesonline.mspro;
 
 import br.com.publicacoesonline.mspro.models.Processo;
 import br.com.publicacoesonline.mspro.models.Reu;
+import br.com.publicacoesonline.mspro.services.ReuService;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.data.domain.Page;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -25,8 +21,11 @@ public class ProcessoAPITest {
 
     private String urlApi = "/api/v1/processos";
 
-    //Adicionar um numero de processo
+    //Adicionar um numero de processo para teste
     private String numeroProcesso = "6493257-19.4289.fja.5973";
+
+    @Autowired
+    private ReuService reuService;
 
     @Autowired
     private TestRestTemplate rest;
@@ -44,7 +43,6 @@ public class ProcessoAPITest {
 
         //inserir processo
         ResponseEntity response = rest.postForEntity(urlApi + "/salvar", processo, null);
-        System.out.println(response);
 
         //verificar resposta
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
@@ -58,7 +56,6 @@ public class ProcessoAPITest {
 
         //inserir processo
         ResponseEntity response = rest.postForEntity(urlApi + "/salvar", processo, null);
-        System.out.println(response);
 
         //verificar resposta
         assertEquals(HttpStatus.CONFLICT, response.getStatusCode());
@@ -70,7 +67,6 @@ public class ProcessoAPITest {
 
         //realiza a consulta na API e retorna uma string
        ResponseEntity<String> response = rest.getForEntity(urlApi, String.class);
-       System.out.println(response);
 
        //compara se dentro da string a lista nao esta vazia
        Assertions.assertNotEquals("<200,{\"content\":[]",response.toString().substring(0,18));
@@ -86,36 +82,31 @@ public class ProcessoAPITest {
         assertEquals(HttpStatus.NOT_FOUND, getProcesso(urlApi + "/numero/" + numeroProcesso).getStatusCode());
     }
 
-    //Adiciona um existente reu no processo
+    //05 adiciona um existente reu no processo
     @Test
     public void testeParaAdicionarUmReuNoProcesso(){
 
-        //Adiciona um reu com string alertorio apenas para teste
+        //Adiciona um reu
         Reu reu = new Reu();
-        reu.setNome("Mario N-"+ new Random().nextInt(100));
-        ResponseEntity<Reu> responseReu = rest.postForEntity("/api/v1/reus/salvar", reu, null);
-        System.out.println(responseReu);
+        reu.setNome("Bruno Ramon");
+        reu = reuService.salvar(reu);
 
-        //Pesquisa ou insere o novo processo
+        //verifica se o processo existe, caso nao exista sera criado
         Processo processo = new Processo();
         processo.setNumero("1664276-91.6160.ShT.3605");
-
         if(getProcesso(urlApi + "/numero/" + processo.getNumero()).getStatusCode() == HttpStatus.OK){
             ResponseEntity<Processo> responsePro = getProcesso(urlApi + "/numero/" + processo.getNumero());
             processo = responsePro.getBody();
-            System.out.println(responsePro);
         }else{
-            ResponseEntity<Processo> responsePro = rest.postForEntity(urlApi + "/salvar", processo, null);
+            rest.postForEntity(urlApi + "/salvar", processo, null);
+            ResponseEntity<Processo> responsePro = getProcesso(urlApi + "/numero/" + processo.getNumero());
             processo = responsePro.getBody();
-            System.out.println(responsePro);
         }
-//        System.out.println(processo.getNumero());
 
-        //inserir processo
-       // ResponseEntity response = rest.postForEntity(urlApi + "/adicionar/reu?idProcesso=58&idReu=51", processo, null);
-        //System.out.println(response);
+        //insere um reu no processo
+        ResponseEntity response = rest.postForEntity(urlApi + "/adicionar/reu?idProcesso="+processo.getId()+"&idReu="+reu.getId(), processo, null);
 
-        //verificar resposta
-        //assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        //verifica a resposta
+        assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 }
