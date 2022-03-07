@@ -1,4 +1,4 @@
-# Microserviço de Processos (ms-pro)
+# Microserviço de Processos Judiciais (ms-pro)
 
 ## 💻 Tecnologias utilizadas:
 - Java 8
